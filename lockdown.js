@@ -1,9 +1,16 @@
+#!/usr/bin/env node
+
+if (process.env['LOCKDOWN_RUNNING_IDIOT']) process.exit(0);
+
 var http = require('http'),
     jsel = require('JSONSelect'),
-    crypto = require('crypto');
+    crypto = require('crypto'),
+    exec = require('child_process').exec;
+
+var boundPort;
 
 function rewriteURL(u) {
-    return u.replace('registry.npmjs.org', 'localhost:1337');
+    return u.replace('registry.npmjs.org', '127.0.0.1:' + boundPort);
 }
 
 function rewriteVersionMD(json) {
@@ -20,7 +27,7 @@ function rewritePackageMD(json) {
   return JSON.stringify(json);
 }
 
-http.createServer(function (req, res) {
+var server = http.createServer(function (req, res) {
   if (req.method !== 'GET') {
     return res.end('non GET requests not supported', 501);
   }
@@ -45,8 +52,6 @@ http.createServer(function (req, res) {
   }, function(rres) {
     res.setHeader('Content-Type', rres.headers['content-type']);
     if (type === 'tarball') res.setHeader('Content-Length', rres.headers['content-length']);
-    if (type === 'package_metadata') console.log(rres.headers);
-
     var b = "";
     rres.on('data', function(d) {
       hash.update(d);
@@ -69,4 +74,23 @@ http.createServer(function (req, res) {
     });
   });
   r.end();
-}).listen(1337, '127.0.0.1');
+});
+
+server.listen(process.env['PORT'] || 0, '127.0.0.1', function() {
+  boundPort = server.address().port;
+
+  console.log("CWD:", process.cwd());
+  var child = exec('npm install', {
+    env: {
+      NPM_CONFIG_REGISTRY: 'http://127.0.0.1:' + boundPort,
+      LOCKDOWN_RUNNING_IDIOT: "true",
+      PATH: process.env['PATH']
+    },
+    cwd: process.cwd()
+  }, function(e) {
+    console.log('complete');
+    process.exit(e ? 1 : 0);
+  });
+  child.stdout.pipe(process.stdout);
+  child.stderr.pipe(process.stderr);
+});

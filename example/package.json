@@ -1,0 +1,11 @@
+{
+  "name": "example_lockdown_usage",
+  "version": "0.0.1",
+  "private": "true",
+  "dependencies": {
+    "express": "*"
+  },
+  "scripts": {
+    "preinstall": "npm install ../ && lockdown"
+  }
+}
