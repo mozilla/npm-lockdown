@@ -11,7 +11,11 @@
     "node": ">=0.6.17"
   },
   "dependencies": {
-    "JSONSelect": "0.4.0"
+    "JSONSelect": "0.4.0",
+    "read-installed": "0.0.1"
   },
-  "bin": "./lockdown.js"
+  "bin": {
+    "lockdown": "./lockdown.js",
+    "lockdown-relock": "./relock.js"
+  }
 }

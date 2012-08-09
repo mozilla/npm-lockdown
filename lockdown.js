@@ -46,7 +46,9 @@ function rewriteVersionMD(json) {
     return null;
   }
 
-  if (lockdownJson[json.name][json.version] !== json.dist.shasum) {
+  // a '*' shasum is not checked
+  var shasum = lockdownJson[json.name][json.version];
+  if (shasum !== '*' && shasum !== json.dist.shasum) {
     errors.push("package " + json.name + "@" + json.version + " has a different checksum (" +
                 lockdownJson[json.name][json.version] + " v. " + json.dist.shasum + ")");
     return null;

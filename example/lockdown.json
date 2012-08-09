@@ -2,6 +2,9 @@
     "JSONSelect": {
         "0.4.0": "a08edcc67eb3fcbe99ed630855344a0cf282bb8d"
     },
+    "read-installed": {
+      "0.0.1": "2d9b9086ae33ae42793210f519701169edabd2e2"
+    },
     "express": {
         "2.5.8": "f166b55d4e8c6d2307ef88ad1768209613f7452a"
     },
