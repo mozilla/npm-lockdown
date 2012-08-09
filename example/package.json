@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": "true",
   "dependencies": {
-    "express": "*"
+    "express": "2.5.8"
   },
   "scripts": {
     "preinstall": "npm install ../ && lockdown"
