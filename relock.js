@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var path = require('path'),
     fs = require('fs'),
     readInstalled = require("read-installed");
