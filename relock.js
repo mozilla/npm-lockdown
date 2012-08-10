@@ -19,8 +19,23 @@ function relock () {
         walk(data.dependencies[key], packages);
       });
     }
-    fs.writeFile(path.join(process.cwd(), 'lockdown.json'), JSON.stringify(packages, null, '  '));
+    fs.writeFile(path.join(process.cwd(), 'lockdown.json'), JSON.stringify(sortObj(packages), null, '  '));
   });
+}
+
+// we take advantage of the way JSON.stringify() is implemented to
+// write sorted lockdown.json files for better diffs.
+function sortObj(obj) {
+  if (typeof obj === 'object' && obj !== null) {
+    var sorted = {};
+    Object.keys(obj).sort().forEach(function(k) {
+      sorted[k] = sortObj(obj[k]);
+    });
+    return sorted;
+  } else if (Array.isArray(obj)) {
+    return obj.sort().map(sortObj);
+  }
+  return obj;
 }
 
 function walk (data, packages) {
