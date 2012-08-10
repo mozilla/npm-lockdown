@@ -44,7 +44,7 @@ To get started:
       "dependencies": { "lockdown": "0.0.1" },
       "scripts": { "preinstall": "./lockdown" }
 
-  5. generate a lockdown.json: node_modules/.bin/lockdown-relock
+  5. generate a lockdown.json: `node_modules/.bin/lockdown-relock`
   6. commit: `git add package.json lockdown lockdown.json && git commit -m "be safe"`
 
 Notes:
@@ -58,7 +58,7 @@ Notes:
 
 ## Changing dependencies once locked down
 
-You simply update your dependencies explicitly, relock, and commit:
+You update your dependencies explicitly, relock, and commit:
 
     npm install --save foo@1.2.3
     node_modules/.bin/lockdown-relock
