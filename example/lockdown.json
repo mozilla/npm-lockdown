@@ -38,6 +38,9 @@
   "mkdirp": {
     "0.3.0": "1bbf5ab1ba827af23575143490426455f481fe1e"
   },
+  "node-markdown": {
+    "0.1.1": "e365baba38d4ac56d8563dd69ca6d7215b08fb94"
+  },
   "npmlog": {
     "0.0.2": "f0cf4b2c519950c00e91ba8e2868b62bf86254f6"
   },
