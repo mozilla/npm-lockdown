@@ -3,7 +3,7 @@
 NPM Lockdown is a tool that locks your node.js app to
 specific versions of dependencies... So that you can:
 
-  1. know that the code you develop against is the that you test and deploy
+  1. know that the code you develop against is what you test and deploy
   2. `npm install` and get the same code, every time.
   3. not have to copy all of your dependencies into your project
   4. not have to stand up a private npm repository to solve this problem.
