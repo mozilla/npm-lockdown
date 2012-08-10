@@ -41,8 +41,8 @@ To get started:
   3. copy the bootstrap file into your repository: `cp -L node_modules/.bin/lockdown lockdown`
   4. add two lines to your package.json file:
 
-    "dependencies": { "lockdown": "0.0.1" },
-    "scripts": { "preinstall": "./lockdown" }
+      "dependencies": { "lockdown": "0.0.1" },
+      "scripts": { "preinstall": "./lockdown" }
 
   5. generate a lockdown.json: node_modules/.bin/lockdown-relock
   6. commit: `git add package.json lockdown lockdown.json && git commit -m "be safe"`
