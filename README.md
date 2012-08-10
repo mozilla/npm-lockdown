@@ -8,6 +8,11 @@ specific versions of dependencies... So that you can:
   3. not have to copy all of your dependencies into your project
   4. not have to stand up a private npm repository to solve this problem.
 
+## Who is this for?
+
+Node.JS application developers, but not library authors.  Stuff published
+in npm as libraries probably wouldn't be interested.
+
 ## Why Care?
 
 Even if you express verbatim versions in your package.json file, you're still

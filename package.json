@@ -4,7 +4,7 @@
     "Zachary Carter <zach@carter.name> (http://twitter.com/zii)"
   ],
   "name": "lockdown",
-  "description": "Meh",
+  "description": "Lock your node.js app to specific versions (and checksums) of dependencies.",
   "version": "0.0.2",
   "repository": {
     "type": "git",
