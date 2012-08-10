@@ -51,7 +51,7 @@ To get started:
 Notes:
 
   * You can put the lockdown script anywhere you like, but the `preinstall` line must be changed
-  * You should use the latest stable version of lockdown, find it from the [npm repository](https://npmjs.org/package/lockdown)
+  * You should use the latest stable version of lockdown, find it from the [npm registry](https://npmjs.org/package/lockdown)
 
 ## Installing dependencies once locked down
 
