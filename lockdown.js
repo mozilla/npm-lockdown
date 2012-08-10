@@ -4,7 +4,6 @@ if (process.env['LOCKDOWN_RUNNING_IDIOT']) process.exit(0);
 
 
 var http = require('http'),
-    jsel = require('JSONSelect'),
     crypto = require('crypto'),
     exec = require('child_process').exec,
     fs = require('fs'),
@@ -31,37 +30,59 @@ function rewriteURL(u) {
     return u.replace('registry.npmjs.org', '127.0.0.1:' + boundPort);
 }
 
+function packageOk(name, ver, sha, required) {
+  if (!lockdownJson[name]) {
+    if (required) {
+      errors.push("package '" + name + "' not in lockdown.json!");
+    }
+    return false;
+  }
+
+  if (lockdownJson[name][ver] === undefined) {
+    if (required) {
+      errors.push("package version " + name + "@" + ver + " not in lockdown.json!");
+    }
+    return false;
+  }
+
+  // a '*' shasum is not checked
+  var wantSHA = lockdownJson[name][ver];
+  if (wantSHA !== '*' && wantSHA !== sha) {
+    if (required) {
+      errors.push("package " + name + "@" + ver + " has a different checksum (" +
+                  wantSHA + " v. " + sha + ")");
+    }
+    return false;
+  }
+  return true;
+}
+
+
 function rewriteVersionMD(json) {
   if (typeof json === 'string') json = JSON.parse(json);
   json.dist.tarball = rewriteURL(json.dist.tarball);
 
   // is the name/version/sha in our lockdown.json?
-  if (!lockdownJson[json.name]) {
-    errors.push("package '" + json.name + "' not in lockdown.json!");
-    return null;
-  }
-
-  if (lockdownJson[json.name][json.version] === undefined) {
-    errors.push("package version " + json.name + "@" + json.version + " not in lockdown.json!");
-    return null;
-  }
-
-  // a '*' shasum is not checked
-  var shasum = lockdownJson[json.name][json.version];
-  if (shasum !== '*' && shasum !== json.dist.shasum) {
-    errors.push("package " + json.name + "@" + json.version + " has a different checksum (" +
-                lockdownJson[json.name][json.version] + " v. " + json.dist.shasum + ")");
-    return null;
-  }
+  if (!packageOk(json.name, json.version, json.dist.shasum, true)) return null;
 
   return JSON.stringify(json);
 }
 
 function rewritePackageMD(json) {
   if (typeof json === 'string') json = JSON.parse(json);
-  jsel.forEach(".versions > * > .dist:has(:root > .tarball)", json, function(dist) {
-    dist.tarball = rewriteURL(dist.tarball);
+
+  Object.keys(json.versions).forEach(function(ver) {
+    var data = json.versions[ver];
+    var name = data.name;
+    var sha = data.dist ? data.dist.shasum : undefined;
+
+    if (packageOk(name, ver, sha, false)) {
+      data.dist.tarball = rewriteURL(data.dist.tarball);
+    } else {
+      delete json.versions[ver];
+    }
   });
+
   return JSON.stringify(json);
 }
 
