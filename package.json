@@ -1,5 +1,8 @@
 {
   "author": "Lloyd Hilaiel <lloyd@hilaiel.com> (http://lloyd.io)",
+  "contributors": [
+    "Zachary Carter <zach@carter.name> (http://twitter.com/zii)"
+  ],
   "name": "lockdown",
   "description": "Meh",
   "version": "0.0.1",
