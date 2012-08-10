@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-if (process.env['LOCKDOWN_RUNNING_IDIOT']) process.exit(0);
+if (process.env['NPM_LOCKDOWN_RUNNING']) process.exit(0);
 
+console.log("NPM Lockdown is here to check your dependencies!  Never fear!");
 
 var http = require('http'),
     crypto = require('crypto'),
@@ -12,9 +13,7 @@ var http = require('http'),
 try {
   var lockdownJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'lockdown.json')));
 } catch(e) {
-  // XXX: what should they do?
-  console.log("I cannot read lockdown.json!  You should do something!");
-  console.log("error:", e);
+  console.log("\nERROR: I cannot read lockdown.json!  run node_modules/.bin/lockdown-relock to generate!\n");
   process.exit(1);
 }
 
@@ -109,8 +108,6 @@ var server = http.createServer(function (req, res) {
   var arr = req.url.substr(1).split('/');
   var type = [ '', 'package_metadata', 'version_metadata', 'tarball' ][arr.length];
 
-  console.log("Proxied NPM request -", type + ":", req.url);
-
   // let's extract pkg name and version sensitive to the type of request being performed.
   var pkgname, pkgver;
   if (type === 'tarball') {
@@ -170,7 +167,7 @@ server.listen(process.env['PORT'] || 0, '127.0.0.1', function() {
   var child = exec('npm install', {
     env: {
       NPM_CONFIG_REGISTRY: 'http://127.0.0.1:' + boundPort,
-      LOCKDOWN_RUNNING_IDIOT: "true",
+      NPM_LOCKDOWN_RUNNING: "true",
       PATH: process.env['PATH']
     },
     cwd: process.cwd()
