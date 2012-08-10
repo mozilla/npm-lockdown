@@ -1,25 +1,27 @@
-NPM Lockdown is a package that locks your node.js app to
-specific versions of dependencies so that you can:
+## What's this?
 
-  1. know that the code you develop against is the same as what you test and deploy
-  2. npm install and get the right versions will be deployed.
-  3. commit check-sums to your source control system
-  4. not have to copy all of your dependencies into your project
-  5. not have to stand up a private npm repository to solve this problem.
+NPM Lockdown is a tool that locks your node.js app to
+specific versions of dependencies... So that you can:
+
+  1. know that the code you develop against is the that you test and deploy
+  2. `npm install` and get the same code, every time.
+  3. not have to copy all of your dependencies into your project
+  4. not have to stand up a private npm repository to solve this problem.
 
 ## Why Care?
 
 Even if you express verbatim versions in your package.json file, you're still
 vulnerable to your code breaking at any time.  This can happen if a dependency
-of a project you depend on with a specific version, itself depends on other
+of a project you depend on with a specific version *itself* depends on another
 packages with a version range.
 
 How can other people accidentally or intentionally break your node.js app?
 Well, they might...
 
-  1. ... push a new version that no longer supports your version of node.js
-  2. .. fix a subtle bug that you depend on
-  3. .. accidentally introduce a subtle bug
+  * ... push a new version that no longer supports your preferred version of node.js.
+  * ... fix a subtle bug that you actually depend on.
+  * ... accidentally introduce a subtle bug.
+  * ... be having a bad day.
 
 And, any author at any time can overwrite the package version they have published
 so one under-thought `npm publish -f` can mean a subtle bug that steals days
