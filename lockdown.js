@@ -54,6 +54,12 @@ function packageOk(name, ver, sha, required) {
     }
     return false;
   }
+
+  if (wantSHA === '*') {
+    warn.push("Lockdown cannot guarantee your saftey!  No sha for pkg " + name + "@" + ver +
+              " in lockdown.json");
+  }
+
   return true;
 }
 
@@ -167,10 +173,15 @@ server.listen(process.env['PORT'] || 0, '127.0.0.1', function() {
     },
     cwd: process.cwd()
   }, function(e) {
-    // XXX: here is the place to check for sha errors during our run and output them all?
+    if (warn.length) {
+      console.log();
+      console.log("LOCKDOWN WARNINGS:");
+      warn.forEach(function(e) { console.log("   ", e); });
+      console.log();
+    }
     if (errors.length) {
       console.log();
-      console.log("FATAL ERRORS:");
+      console.log("LOCKDOWN ERRORS:");
       errors.forEach(function(e) { console.log("   ", e); });
       console.log();
     }
