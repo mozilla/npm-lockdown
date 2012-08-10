@@ -65,5 +65,5 @@ function getShasum (cache, name, version) {
 
 exports.relock = relock;
 
-if (process.argv[1] === __filename) relock();
+if (fs.realpathSync(process.argv[1]) === fs.realpathSync(__filename)) relock();
 
