@@ -66,29 +66,30 @@ function packageOk(name, ver, sha, required) {
 
 function rewriteVersionMD(json) {
   if (typeof json === 'string') json = JSON.parse(json);
-  json.dist.tarball = rewriteURL(json.dist.tarball);
+  if (!json.error) {
+    json.dist.tarball = rewriteURL(json.dist.tarball);
 
-  // is the name/version/sha in our lockdown.json?
-  if (!packageOk(json.name, json.version, json.dist.shasum, true)) return null;
-
+    // is the name/version/sha in our lockdown.json?
+    if (!packageOk(json.name, json.version, json.dist.shasum, true)) return null;
+  }
   return JSON.stringify(json);
 }
 
 function rewritePackageMD(json) {
   if (typeof json === 'string') json = JSON.parse(json);
+  if (!json.error) {
+    Object.keys(json.versions).forEach(function(ver) {
+      var data = json.versions[ver];
+      var name = data.name;
+      var sha = data.dist ? data.dist.shasum : undefined;
 
-  Object.keys(json.versions).forEach(function(ver) {
-    var data = json.versions[ver];
-    var name = data.name;
-    var sha = data.dist ? data.dist.shasum : undefined;
-
-    if (packageOk(name, ver, sha, false)) {
-      data.dist.tarball = rewriteURL(data.dist.tarball);
-    } else {
-      delete json.versions[ver];
-    }
-  });
-
+      if (packageOk(name, ver, sha, false)) {
+        data.dist.tarball = rewriteURL(data.dist.tarball);
+      } else {
+        delete json.versions[ver];
+      }
+    });
+  }
   return JSON.stringify(json);
 }
 
@@ -154,6 +155,7 @@ var server = http.createServer(function (req, res) {
           res.end("package installation disallowed by lockdown");
         } else {
           res.setHeader('Content-Length', Buffer.byteLength(b));
+          res.writeHead(rres.statusCode);
           res.end(b);
         }
       }
