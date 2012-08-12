@@ -1,3 +1,9 @@
+# npm-lockdown
+
+Put your dependencies on lockdown.
+
+![lockdown](https://github.com/lloyd/npm-lockdown/raw/master/npm-lockdown.png)
+
 ## What's this?
 
 NPM Lockdown is a tool that locks your node.js app to
