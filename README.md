@@ -74,7 +74,35 @@ You update your dependencies explicitly, relock, and commit:
 
 done!
 
+## Related Tools
 
+**[npm shrinkwrap][]** - NPM itself has a feature called "shrinkwrap" that
 
+  locks down the versions of a package's dependencies so that you can control exactly which
+  versions of each dependency will be used when your package is installed.
 
+At present (as of npm v1.1.33), the implementation of shrinkwrap has a couple flaws
+which make it unusable for certain applications:
 
+  1. No checksums!  NPM shrinkwrap does not guarantee bit-wise equality of the installed
+     dependencies, so if an upstream server or author decides to change the contents of
+     version 1.2.3 of `foo`, you'll install something different than you intended without
+     knowing.
+  2. Does not play nice with `optionalDependencies` - If you "shrinkwrap" your app and you
+     have an installed dep that is optional, the dependency is no longer optional.  This might
+     not be what you want.
+
+  [npm shrinkwrap]: https://npmjs.org/doc/shrinkwrap.html
+
+*NOTE:* you can combine lockdown with shrinkwrap just fine.  If all you care about is #1 above.
+
+The path forward is to build checksums into shrinkwrap and kick lockdown to the curb, but until
+then, lockdown solves some problems.  (@izs is [interested in patches][]).
+
+  [interested in patches]: https://twitter.com/izs/status/234330784931143682
+
+**[npm-seal][]** - Solves the same problem as lockdown in a very different way.  Because seal
+is built to be used in concert with shrinkwrap, it suffers from the `optionalDependencies` issue
+described above.
+
+  [npm-seal]: https://github.com/zaach/npm-seal
