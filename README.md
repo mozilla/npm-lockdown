@@ -78,8 +78,8 @@ done!
 
 **[npm shrinkwrap][]** - NPM itself has a feature called "shrinkwrap" that
 
-  locks down the versions of a package's dependencies so that you can control exactly which
-  versions of each dependency will be used when your package is installed.
+> locks down the versions of a package's dependencies so that you can control exactly which
+> versions of each dependency will be used when your package is installed.
 
 At present (as of npm v1.1.33), the implementation of shrinkwrap has a couple flaws
 which make it unusable for certain applications:
