@@ -48,15 +48,13 @@ changed.
 To get started:
 
   1. npm install the specific dependencies of your app
-  2. npm install the version of lockdown you want: `npm install --save lockdown@0.0.1`
-  3. copy the bootstrap file into your repository: `cp -L node_modules/.bin/lockdown lockdown`
-  4. add a line to your package.json file: `"scripts": { "preinstall": "./lockdown" }`
-  5. generate a lockdown.json: `node_modules/.bin/lockdown-relock`
-  6. commit: `git add package.json lockdown lockdown.json && git commit -m "be safe"`
+  2. npm install the version of lockdown you want: `npm install --save lockdown`
+  3. add a line to your package.json file: `"scripts": { "preinstall": "lockdown" }`
+  4. generate a lockdown.json: `node_modules/.bin/lockdown-relock`
+  5. commit: `git add package.json lockdown.json && git commit -m "be safe"`
 
 Notes:
 
-  * You can put the lockdown script anywhere you like, but the `preinstall` line must be changed
   * You should use the latest stable version of lockdown, find it from the [npm registry](https://npmjs.org/package/lockdown)
 
 ## Installing dependencies once locked down
