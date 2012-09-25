@@ -163,13 +163,12 @@ var server = http.createServer(function (req, res) {
 
 server.listen(process.env['LOCKDOWN_PORT'] || 0, '127.0.0.1', function() {
   boundPort = server.address().port;
+  var env = Object.create(process.env);
+  env.NPM_CONFIG_REGISTRY = 'http://127.0.0.1:' + boundPort;
+  env.NPM_LOCKDOWN_RUNNING = "true";
 
   var child = exec('npm install', {
-    env: {
-      NPM_CONFIG_REGISTRY: 'http://127.0.0.1:' + boundPort,
-      NPM_LOCKDOWN_RUNNING: "true",
-      PATH: process.env['PATH']
-    },
+    env: env,
     cwd: process.cwd()
   }, function(e) {
     if (warn.length) {
