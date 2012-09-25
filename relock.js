@@ -2,24 +2,32 @@
 
 var path = require('path'),
     fs = require('fs'),
-    readInstalled = require("read-installed");
+    readInstalled = require("read-installed"),
+    npm = require('npm');
 
 var dir = process.cwd(),
-    cache = path.join(process.env['HOME'], '.npm'),
+    cache,
     tmp = path.resolve('/tmp/.npm');
 
 function relock () {
-  var packages = {};
-
-  readInstalled(dir, void 0, function (er, data) {
-    if (er) throw er;
-    //console.log(data);
-    if (data.dependencies) {
-      Object.keys(data.dependencies).forEach(function (key) {
-        walk(data.dependencies[key], packages);
-      });
+  npm.load(function(npmErr) {
+    if (npmErr) {
+      console.error('npm error! ', npmErr);
+      process.exit(1);
     }
-    fs.writeFile(path.join(process.cwd(), 'lockdown.json'), JSON.stringify(sortObj(packages), null, '  '));
+    cache = npm.cache;
+    var packages = {};
+
+    readInstalled(dir, void 0, function (er, data) {
+      if (er) throw er;
+      //console.log(data);
+      if (data.dependencies) {
+        Object.keys(data.dependencies).forEach(function (key) {
+          walk(data.dependencies[key], packages);
+        });
+      }
+      fs.writeFile(path.join(process.cwd(), 'lockdown.json'), JSON.stringify(sortObj(packages), null, '  '));
+    });
   });
 }
 
