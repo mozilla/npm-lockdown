@@ -2,16 +2,32 @@
 
 var path = require('path'),
     fs = require('fs'),
-    readInstalled = require("read-installed");
+    readInstalled = require("read-installed"),
+    osenv = require('osenv');
 
-var dir = process.cwd(),
-    cache = path.join(process.env['HOME'], '.npm'),
-    tmp = path.resolve('/tmp/.npm');
+var ostemp = osenv.tmpdir();
+var oshome = osenv.home();
+
+var cwd = process.cwd(),
+    cache = findCache(),
+    tmp = findTmp();
+
+function findCache () {
+  return process.platform === "win32"
+            ? path.resolve(process.env.APPDATA || oshome || ostemp, "npm-cache")
+            : path.resolve( oshome || ostemp, ".npm");
+}
+
+function findTmp () {
+  return process.platform === "win32"
+            ? path.resolve(ostemp, "npm-cache")
+            : path.resolve(ostemp, ".npm");
+}
 
 function relock () {
   var packages = {};
 
-  readInstalled(dir, void 0, function (er, data) {
+  readInstalled(cwd, void 0, function (er, data) {
     if (er) throw er;
     //console.log(data);
     if (data.dependencies) {
@@ -19,7 +35,7 @@ function relock () {
         walk(data.dependencies[key], packages);
       });
     }
-    fs.writeFile(path.join(process.cwd(), 'lockdown.json'), JSON.stringify(sortObj(packages), null, '  '));
+    fs.writeFile(path.join(cwd, 'lockdown.json'), JSON.stringify(sortObj(packages), null, '  '));
   });
 }
 
