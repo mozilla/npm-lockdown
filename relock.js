@@ -21,7 +21,7 @@ function findCache () {
 function findTmp () {
   return process.platform === "win32"
             ? path.resolve(ostemp, "npm-cache")
-            : path.resolve(ostemp, ".npm");
+            : path.resolve("/tmp", ".npm");
 }
 
 function relock () {
