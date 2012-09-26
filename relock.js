@@ -10,18 +10,12 @@ var oshome = osenv.home();
 
 var cwd = process.cwd(),
     cache = findCache(),
-    tmp = findTmp();
+    tmp = path.resolve('/tmp', '.npm');
 
 function findCache () {
   return process.platform === "win32"
             ? path.resolve(process.env.APPDATA || oshome || ostemp, "npm-cache")
             : path.resolve( oshome || ostemp, ".npm");
-}
-
-function findTmp () {
-  return process.platform === "win32"
-            ? path.resolve(ostemp, "npm-cache")
-            : path.resolve(ostemp, ".npm");
 }
 
 function relock () {
