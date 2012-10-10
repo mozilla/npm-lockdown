@@ -1,7 +1,8 @@
 {
   "author": "Lloyd Hilaiel <lloyd@hilaiel.com> (http://lloyd.io)",
   "contributors": [
-    "Zachary Carter <zach@carter.name> (http://twitter.com/zii)"
+    "Zachary Carter <zach@carter.name> (http://twitter.com/zii)",
+    "Sean McArthur <sean.monstar@gmail.com> (http://seanmonstar.com)"
   ],
   "name": "lockdown",
   "description": "Lock your node.js app to specific versions (and checksums) of dependencies.",
