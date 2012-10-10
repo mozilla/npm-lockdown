@@ -6,7 +6,7 @@
   ],
   "name": "lockdown",
   "description": "Lock your node.js app to specific versions (and checksums) of dependencies.",
-  "version": "0.0.3",
+  "version": "0.0.4-dev",
   "repository": {
     "type": "git",
     "url": "https://github.com/mozilla/npm-lockdown.git"
