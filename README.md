@@ -2,7 +2,7 @@
 
 Put your dependencies on lockdown.
 
-![lockdown](https://github.com/lloyd/npm-lockdown/raw/master/npm-lockdown.png)
+![lockdown](https://github.com/mozilla/npm-lockdown/raw/master/npm-lockdown.png)
 
 ## What's this?
 
