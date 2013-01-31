@@ -40,28 +40,30 @@ of your week.
 
 ## Usage!
 
+
+
+    npm install --save foo@0.8.1
+    ./node_modules/.bin/lockdown-relock
+
 `npm-lockdown` is easy to get started with.  It generates a single file that lists
 the versions and check-sums of the software you depend on, so any time something
 changes out from under you, `npm install` will fail and tell you what package has
 changed.
 
-To get started:
+### One Time Project Setup
 
-  1. npm install the specific dependencies of your app
-  2. npm install the version of lockdown you want: `npm install --save lockdown`
-  3. add a line to your package.json file: `"scripts": { "preinstall": "lockdown" }`
-  4. generate a lockdown.json: `node_modules/.bin/lockdown-relock`
+  1. npm install the version of lockdown you want: `npm install --save lockdown`
+  2. add a line to your package.json file: `"scripts": { "preinstall": "lockdown" }`
+  3. generate a lockdown.json: `node_modules/.bin/lockdown`
+  4. commit: `git add package.json lockdown.json && git commit -m "be safe"`
+
+### Adding new modules
+
+  1. npm install the specific dependencies of your app `npm install --save foo@0.8.1`
+  4. re-generate your lockdown.json: `node_modules/.bin/lockdown-relock`
   5. commit: `git add package.json lockdown.json && git commit -m "be safe"`
 
-Notes:
-
-  * You should use the latest stable version of lockdown, find it from the [npm registry](https://npmjs.org/package/lockdown)
-
-## Installing dependencies once locked down
-
-    npm install
-
-## Changing dependencies once locked down
+### Changing dependencies once locked down
 
 You update your dependencies explicitly, relock, and commit:
 
@@ -71,6 +73,14 @@ You update your dependencies explicitly, relock, and commit:
     git commit -m "move to foo v1.2.3"
 
 done!
+
+## Notes:
+
+  * You should use the latest stable version of lockdown, find it from the [npm registry](https://npmjs.org/package/lockdown)
+
+## Installing dependencies once locked down
+
+    npm install
 
 ## Related Tools
 
