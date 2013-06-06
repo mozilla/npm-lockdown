@@ -54,7 +54,7 @@ changed.
 
   1. npm install the version of lockdown you want: `npm install --save lockdown`
   2. add a line to your package.json file: `"scripts": { "preinstall": "lockdown" }`
-  3. generate a lockdown.json: `node_modules/.bin/lockdown`
+  3. generate a lockdown.json: `node_modules/.bin/lockdown-relock`
   4. commit: `git add package.json lockdown.json && git commit -m "be safe"`
 
 ### Adding new modules
