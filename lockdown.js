@@ -17,6 +17,10 @@ try {
   process.exit(1);
 }
 
+const registry = process.env['NPM_CONFIG_REGISTRY'] || 'registry.npmjs.org';
+
+console.log("using registry: " + registry);
+
 var boundPort;
 
 // during execution fatal errors will be appended to this list
@@ -26,7 +30,7 @@ var errors = [];
 var warn = [];
 
 function rewriteURL(u) {
-    return u.replace('registry.npmjs.org', '127.0.0.1:' + boundPort);
+    return u.replace(registry, '127.0.0.1:' + boundPort);
 }
 
 function packageOk(name, ver, sha, required) {
@@ -131,7 +135,7 @@ var server = http.createServer(function (req, res) {
   var hash = crypto.createHash('sha1');
 
   var r = http.request({
-    host: 'registry.npmjs.org',
+    host: registry,
     port: 80,
     method: req.method,
     path: req.url,
