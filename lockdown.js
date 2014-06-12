@@ -59,7 +59,7 @@ function packageOk(name, ver, sha, required) {
   }
 
   if (wantSHA === '*') {
-    warn.push("Lockdown cannot guarantee your saftey!  No sha for pkg " + name + "@" + ver +
+    warn.push("Lockdown cannot guarantee your safety!  No sha for pkg " + name + "@" + ver +
               " in lockdown.json");
   }
 
