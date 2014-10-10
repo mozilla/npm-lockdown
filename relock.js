@@ -99,7 +99,13 @@ function getShasum (cache, name, version) {
         try {
           // find sha in cache/regHost/name/.cache.json
           sha = require(path.resolve(path.join(cache, regHost, name, ".cache.json"))).versions[version].dist.shasum
-        } catch (e) {}
+        } catch (e) {
+          try {
+            // find sha in {cwd}/node_modules/name/package.json
+            var package_data = require(path.resolve(path.join(cwd, 'node_modules', name, "package.json")));
+            sha = package_data.dist && package_data.dist.shasum || package_data._shasum;
+          } catch (e) {}
+        }
       }
     }
   }
