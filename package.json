@@ -1,26 +1,29 @@
 {
+  "name": "lockdown",
+  "description": "Lock your node.js app to specific versions (and checksums) of dependencies.",
+  "version": "0.0.7-dev",
   "author": "Lloyd Hilaiel <lloyd@hilaiel.com> (http://lloyd.io)",
+  "bin": {
+    "lockdown": "./lockdown.js",
+    "lockdown-relock": "./relock.js"
+  },
+  "bugs": "https://github.com/mozilla/node-convict/issues",
   "contributors": [
     "Zachary Carter <zach@carter.name> (http://twitter.com/zii)",
     "Sean McArthur <sean.monstar@gmail.com> (http://seanmonstar.com)"
   ],
-  "name": "lockdown",
-  "description": "Lock your node.js app to specific versions (and checksums) of dependencies.",
-  "version": "0.0.7-dev",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mozilla/npm-lockdown.git"
-  },
-  "engines": {
-    "node": ">=0.6.17"
-  },
   "dependencies": {
     "npmconf": "1.1.5",
     "osenv": "0.1.0",
     "read-installed": "3.1.0"
   },
-  "bin": {
-    "lockdown": "./lockdown.js",
-    "lockdown-relock": "./relock.js"
+  "engines": {
+    "node": ">=0.6.17"
+  },
+  "homepage": "https://github.com/mozilla/node-convict",
+  "license": "MPL 2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mozilla/npm-lockdown.git"
   }
 }
