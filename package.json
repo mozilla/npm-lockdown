@@ -7,7 +7,7 @@
     "lockdown": "./lockdown.js",
     "lockdown-relock": "./relock.js"
   },
-  "bugs": "https://github.com/mozilla/node-convict/issues",
+  "bugs": "https://github.com/mozilla/npm-lockdown/issues",
   "contributors": [
     "Zachary Carter <zach@carter.name> (http://twitter.com/zii)",
     "Sean McArthur <sean.monstar@gmail.com> (http://seanmonstar.com)"
@@ -20,7 +20,7 @@
   "engines": {
     "node": ">=0.6.17"
   },
-  "homepage": "https://github.com/mozilla/node-convict",
+  "homepage": "https://github.com/mozilla/npm-lockdown",
   "license": "MPL 2.0",
   "repository": {
     "type": "git",
