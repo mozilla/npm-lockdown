@@ -66,6 +66,8 @@ function walk (data, packages) {
   var name, version, shasum;
   if (data.name) name = data.name;
   if (data.version) version = data.version;
+  
+  if (packages[name] && packages[name][version]) return;
 
   if (name) {
     shasum = getShasum(cache, name, version);
