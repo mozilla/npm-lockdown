@@ -12,14 +12,7 @@ var oshome = osenv.home();
 var regHost = undefined;
 
 var cwd = process.cwd(),
-    cache = findCache(),
     tmp = findTmp();
-
-function findCache () {
-  return process.platform === "win32"
-            ? path.resolve(process.env.APPDATA || oshome || ostemp, "npm-cache")
-            : path.resolve( oshome || ostemp, ".npm");
-}
 
 function findTmp () {
   return process.platform === "win32"
@@ -33,13 +26,14 @@ function relock () {
     if (err) {
       throw err;
     }
+    cache = process.env.NPM_CACHE_DIR || conf.get('cache');
     regHost = parse(conf.get('registry')).host;
     readInstalled(cwd, void 0, function (er, data) {
       if (er) throw er;
       //console.log(data);
       if (data.dependencies) {
         Object.keys(data.dependencies).forEach(function (key) {
-          walk(data.dependencies[key], packages);
+          walk(cache, data.dependencies[key], packages);
         });
       }
       fs.writeFile(path.join(cwd, 'lockdown.json'), JSON.stringify(sortObj(packages), null, '  ') + '\n');
@@ -62,11 +56,11 @@ function sortObj(obj) {
   return obj;
 }
 
-function walk (data, packages) {
+function walk(cache, data, packages) {
   var name, version, shasum;
   if (data.name) name = data.name;
   if (data.version) version = data.version;
-  
+
   if (packages[name] && packages[name][version]) return;
 
   if (name) {
@@ -79,7 +73,7 @@ function walk (data, packages) {
     Object.keys(data.dependencies).forEach(function (key) {
       // ignore bundled dependencies
       if (data.bundleDependencies && data.bundleDependencies.indexOf(key) > -1 ) return;
-      walk(data.dependencies[key], packages);
+      walk(cache, data.dependencies[key], packages);
     });
   }
 }
