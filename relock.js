@@ -12,14 +12,7 @@ var oshome = osenv.home();
 var regHost = undefined;
 
 var cwd = process.cwd(),
-    cache = findCache(),
     tmp = findTmp();
-
-function findCache () {
-  return process.platform === "win32"
-            ? path.resolve(process.env.APPDATA || oshome || ostemp, "npm-cache")
-            : path.resolve( oshome || ostemp, ".npm");
-}
 
 function findTmp () {
   return process.platform === "win32"
@@ -33,13 +26,14 @@ function relock () {
     if (err) {
       throw err;
     }
+    cache = process.env.NPM_CACHE_DIR || conf.get('cache');
     regHost = parse(conf.get('registry')).host;
     readInstalled(cwd, void 0, function (er, data) {
       if (er) throw er;
       //console.log(data);
       if (data.dependencies) {
         Object.keys(data.dependencies).forEach(function (key) {
-          walk(data.dependencies[key], packages);
+          walk(cache, data.dependencies[key], packages);
         });
       }
       fs.writeFile(path.join(cwd, 'lockdown.json'), JSON.stringify(sortObj(packages), null, '  ') + '\n');
@@ -62,10 +56,12 @@ function sortObj(obj) {
   return obj;
 }
 
-function walk (data, packages) {
+function walk(cache, data, packages) {
   var name, version, shasum;
   if (data.name) name = data.name;
   if (data.version) version = data.version;
+
+  if (packages[name] && packages[name][version]) return;
 
   if (name) {
     shasum = getShasum(cache, name, version);
@@ -77,7 +73,7 @@ function walk (data, packages) {
     Object.keys(data.dependencies).forEach(function (key) {
       // ignore bundled dependencies
       if (data.bundleDependencies && data.bundleDependencies.indexOf(key) > -1 ) return;
-      walk(data.dependencies[key], packages);
+      walk(cache, data.dependencies[key], packages);
     });
   }
 }
@@ -92,12 +88,26 @@ function getShasum (cache, name, version) {
       // find sha in cache/name/.cache.json
       sha = require(path.resolve(path.join(cache, name, ".cache.json"))).versions[version].dist.shasum;
     } catch (e) {
-      try  {
+      try {
         // find sha in cache/regHost/name/version/.cache.json
         sha = require(path.resolve(path.join(cache, regHost, name, version, ".cache.json"))).dist.shasum;
       } catch (e) {
-        // find sha in cache/regHost/name/.cache.json
-        sha = require(path.resolve(path.join(cache, regHost, name, ".cache.json"))).versions[version].dist.shasum
+        try {
+          // find sha in cache/regHost/name/.cache.json
+          sha = require(path.resolve(path.join(cache, regHost, name, ".cache.json"))).versions[version].dist.shasum
+        } catch (e) {
+          try {
+            // find sha in cache/name/version/package.json
+            sha = require(path.resolve(path.join(cache, name, version, "package", "package.json")))._shasum
+          } catch (e) {
+            try {
+              // find sha in node_modules/name/package.json
+              sha = require(path.resolve(path.join("node_modules", name, "package.json")))._shasum
+            } catch (e) {
+              
+            }
+          }
+        }
       }
     }
   }
