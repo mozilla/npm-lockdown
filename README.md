@@ -34,10 +34,6 @@ Well, they might...
   * ... accidentally introduce a subtle bug.
   * ... be having a bad day.
 
-And, any author at any time can overwrite the package version they have published
-so one under-thought `npm publish -f` can mean a subtle bug that steals days
-of your week.
-
 ## Usage!
 
 
