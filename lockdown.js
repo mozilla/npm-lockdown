@@ -184,12 +184,13 @@ exec('npm config get registry', function(err, stdout, stderr) {
 
   server.listen(process.env['LOCKDOWN_PORT'] || 0, '127.0.0.1', function() {
     boundPort = server.address().port;
+    var localRegistry = 'http://127.0.0.1:' + boundPort;
     var env = copy(process.env, {
-      NPM_CONFIG_REGISTRY: 'http://127.0.0.1:' + boundPort,
+      NPM_CONFIG_REGISTRY: localRegistry,
       NPM_LOCKDOWN_RUNNING: "true"
     });
 
-    var child = exec('npm install', {
+    var child = exec('npm install --registry=' + localRegistry, {
       cwd: process.cwd(),
       env: env
     }, function(e) {
