@@ -5,6 +5,8 @@ if (process.env['NPM_LOCKDOWN_RUNNING']) process.exit(0);
 console.log("NPM Lockdown is here to check your dependencies!  Never fear!");
 
 var http = require('http'),
+    RegistryClient = require('silent-npm-registry-client'),
+    npmClient = new RegistryClient(),
     url = require('url'),
     crypto = require('crypto'),
     exec = require('child_process').exec,
@@ -143,43 +145,30 @@ exec('npm config get registry', function(err, stdout, stderr) {
     }
 
     var hash = crypto.createHash('sha1');
+    var pkgUrl = url.resolve(registry.href, req.url);
 
-    var r = http.request({
-      host: registry.hostname,
-      port: registry.port || 80,
-      method: req.method,
-      path: registry.pathname + req.url,
-      agent: false
-    }, function(rres) {
-      res.setHeader('Content-Type', rres.headers['content-type']);
-      if (type === 'tarball') res.setHeader('Content-Length', rres.headers['content-length']);
-      var b = "";
-      rres.on('data', function(d) {
-        hash.update(d);
-        if (type != 'tarball') b += d;
-        else res.write(d);
-      });
-      rres.on('end', function() {
-        if (type === 'tarball') {
+    if (type === 'tarball') {
+      npmClient.fetch(pkgUrl, { timeout: 2000 }, function(err, rres) {
+        rres.on('data', function(chunk) {
+          res.write(chunk);
+        });
+        rres.on('end', function() {
           res.end();
+        });
+      });
+    } else {
+      npmClient.get(pkgUrl, { timeout: 2000 }, function(err, data, raw, rres) {
+        var lockedPkg = rewritePackageMD(raw);
+        if (lockedPkg === null) {
+          res.writeHead(404);
+          res.end("package installation disallowed by lockdown");
         } else {
-          if (type === 'package_metadata') {
-            b = rewritePackageMD(b);
-          } else if (type === 'version_metadata') {
-            b = rewriteVersionMD(b);
-          }
-          if (b === null) {
-            res.writeHead(404);
-            res.end("package installation disallowed by lockdown");
-          } else {
-            res.setHeader('Content-Length', Buffer.byteLength(b));
-            res.writeHead(rres.statusCode);
-            res.end(b);
-          }
+          res.setHeader('Content-Length', Buffer.byteLength(lockedPkg));
+          res.writeHead(rres.statusCode);
+          res.end(lockedPkg);
         }
       });
-    });
-    r.end();
+    }
   });
 
   server.listen(process.env['LOCKDOWN_PORT'] || 0, '127.0.0.1', function() {
