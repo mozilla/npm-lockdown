@@ -104,7 +104,7 @@ which make it unusable for certain applications:
      have an installed dep that is optional, the dependency is no longer optional.  This might
      not be what you want.
 
-  [npm shrinkwrap]: https://npmjs.org/doc/shrinkwrap.html
+  [npm shrinkwrap]: https://docs.npmjs.com/cli/shrinkwrap
 
 *NOTE:* you can combine lockdown with shrinkwrap just fine.  If all you care about is #1 above.
 
