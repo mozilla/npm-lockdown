@@ -1,7 +1,7 @@
 {
   "name": "lockdown",
   "description": "Lock your node.js app to specific versions (and checksums) of dependencies.",
-  "version": "0.0.8-dev",
+  "version": "0.0.10-dev",
   "author": "Lloyd Hilaiel <lloyd@hilaiel.com> (http://lloyd.io)",
   "bin": {
     "lockdown": "./lockdown.js",
