@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var path = require('path'),
+    _ = require('lodash'),
     fs = require('fs'),
     readInstalled = require("read-installed"),
     osenv = require('osenv'),
@@ -20,7 +21,7 @@ function findTmp () {
             : path.resolve("/tmp", ".npm");
 }
 
-function relock () {
+function relock (pkgsToLock) {
   var packages = {};
   npmconf.load(function (err, conf) {
     if (err) {
@@ -33,8 +34,14 @@ function relock () {
       //console.log(data);
       if (data.dependencies) {
         Object.keys(data.dependencies).forEach(function (key) {
-          walk(cache, data.dependencies[key], packages);
+          if (!pkgsToLock || pkgsToLock.indexOf(key) >= 0) {
+            walk(cache, data.dependencies[key], packages);
+          }
         });
+      }
+      if (pkgsToLock) {
+        var currentPackages = JSON.parse(fs.readFileSync(path.join(cwd, 'lockdown.json')));
+        packages = _.merge({}, currentPackages, packages);
       }
       fs.writeFile(path.join(cwd, 'lockdown.json'), JSON.stringify(sortObj(packages), null, '  ') + '\n');
     });
@@ -104,7 +111,7 @@ function getShasum (cache, name, version) {
               // find sha in node_modules/name/package.json
               sha = require(path.resolve(path.join("node_modules", name, "package.json")))._shasum
             } catch (e) {
-              
+
             }
           }
         }
@@ -121,5 +128,5 @@ function getShasum (cache, name, version) {
 
 exports.relock = relock;
 
-if (fs.realpathSync(process.argv[1]) === fs.realpathSync(__filename)) relock();
+if (fs.realpathSync(process.argv[1]) === fs.realpathSync(__filename)) relock(process.argv.slice(2));
 

@@ -13,9 +13,12 @@
     "Sean McArthur <sean.monstar@gmail.com> (http://seanmonstar.com)"
   ],
   "dependencies": {
+    "lodash": "^4.8.2",
+    "npm-registry-client": "^7.1.0",
     "npmconf": "1.1.5",
     "osenv": "0.1.0",
-    "read-installed": "3.1.0"
+    "read-installed": "3.1.0",
+    "silent-npm-registry-client": "^2.1.0"
   },
   "engines": {
     "node": ">=0.6.17"
