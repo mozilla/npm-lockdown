@@ -1,0 +1,5 @@
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+ChangeLog text eol=lf
+LICENSE text eol=lf
